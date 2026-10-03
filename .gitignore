@@ -1,0 +1,6 @@
+.venv/
+__pycache__/
+*.pyc
+
+individual+household+electric+power+consumption.zip
+individual+household+electric+power+consumption/
