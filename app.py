@@ -1,5 +1,5 @@
 from flask import Flask, render_template, jsonify, request
-
+import csv
 from pyspark.sql import SparkSession
 
 from pyspark.sql.functions import (
@@ -17,6 +17,42 @@ from pyspark.sql.functions import (
 
 
 app = Flask(__name__)
+
+# ==========================================================
+# LOAD PREDICTION RESULTS
+# ==========================================================
+
+prediction_data = []
+
+with open("prediction_results.csv", "r") as file:
+    reader = csv.DictReader(file)
+
+    for row in reader:
+        prediction_data.append({
+            "Day": row["Day"],
+            "Actual": float(row["Actual"]),
+            "Linear_Regression": float(row["Linear_Regression"]),
+            "Random_Forest": float(row["Random_Forest"]),
+            "GBT": float(row["GBT"])
+        })
+
+# ==========================================================
+# LOAD MODEL METRICS
+# ==========================================================
+
+model_metrics = []
+
+with open("model_metrics.csv", "r") as file:
+    reader = csv.DictReader(file)
+
+    for row in reader:
+        model_metrics.append({
+            "Model": row["Model"],
+            "MAE": float(row["MAE"]),
+            "RMSE": float(row["RMSE"]),
+            "R2": float(row["R2"])
+        })
+
 
 
 # ==========================================================
@@ -593,6 +629,16 @@ def yearly_data():
 
     })
 
+# ==========================================================
+# PREDICTION API
+# ==========================================================
+
+@app.route("/api/prediction")
+def prediction():
+    return jsonify({
+        "predictions": prediction_data,
+        "metrics": model_metrics
+    })
 
 # ==========================================================
 # START FLASK
