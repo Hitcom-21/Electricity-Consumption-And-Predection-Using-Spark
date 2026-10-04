@@ -175,19 +175,18 @@ prediction_data.show(
 )
 
 
-# ==========================================================
+# =========================================================python prediction.py=
 # TRAIN / TEST SPLIT
 # ==========================================================
 
-# Training data: up to December 2009
+# Training data: up to December 2021
 train_data = prediction_data.filter(
-    col("Day") <= lit(date(2009, 12, 31))
+    col("Day") <= lit(date(2021, 12, 31))
 )
 
-
-# Testing data: January 2010 onwards
+# Testing data: January 2022 onwards
 test_data = prediction_data.filter(
-    col("Day") >= lit(date(2010, 1, 1))
+    col("Day") >= lit(date(2022, 1, 1))
 )
 
 
